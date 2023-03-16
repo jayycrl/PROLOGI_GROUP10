@@ -1,0 +1,1 @@
+json.load(open('database.json', 'r'))
