@@ -1,0 +1,10 @@
+{
+    "account1" : {
+        "username"    : "eatsalotapizza",
+        "password"    : "passwordthatiuseeverywhere12",
+        "orderHistory": [
+                        ["Small (10 inch)", "Pepperoni", "Thin crust", "Cheese stuffed crust", 469.00], 
+                        ["Large (14 inch)", "Jalapeno Poppers", "Pan Pizza", "Sausage Stuffed Crust", 799.00]
+                        ]
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "basePrice": 369.00,
+    "sizes": [
+        ["Small (10 inch)", 0.00],
+        ["Medium (12 inch)", 190.00],
+        ["Large (14 inch)", 340.00]
+    ],
+    "toppings": [
+        ["Cheese", 0.00],
+        ["Pepperoni", 0.00],
+        ["Veggie Supreme", 0.00],
+        ["Spicy Pepperoni", 0.00],
+        ["Bacon Supreme", 30.00],
+        ["Bacon Cheeseburger", 30.00],
+        ["Supreme", 30.00],
+        ["Hawaiian", 30.00],
+        ["Cheese Supreme", 30.00],
+        ["BBQ Chicken", 30.00],
+        ["Shrimp Supreme", 30.00],
+        ["Meat Lovers", 60.00],
+        ["Margherita", 60.00],
+        ["Scrambled Egg Breakfast", 60.00],
+        ["Pesto with Goat Cheese", 90.00],
+        ["Grilled Honey Sriracha Chicken", 90.00],
+        ["Jalapeno Poppers", 90.00],
+        ["Lehmejun (Armenian Pizza)", 90.00],
+        ["Taco Quesadilla", 90.00],
+        ["Pesto", 90.00]
+    ],
+    "dough": [
+        ["Pan Pizza", 0.00],
+        ["Thin crust", 0.00]
+    ],
+    "stuffing": [
+        ["No crust stuffing", 0.00],
+        ["Cheese stuffed crust", 100.00],
+        ["Sausage stuffed crust", 100.00]
+    ]
+}
