@@ -1,5 +1,5 @@
 import json
-from os import system
+from os import system, name
 
 # orders in both orderList and orderHistory are arrays that are structured as follows:
 # Crust size,
@@ -9,6 +9,15 @@ from os import system
 # Price (float)
 # Example: ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 469.00]
 orderList = []
+
+# cross-platform screen clear.
+def clear():
+    # windows
+    if name == 'nt':
+        _ = system('cls')
+    # macos + linux
+    else:
+        _ = system('clear')
 
 def addOrder():
     menuDatabase = json.load(open('menu.json', 'r'))
@@ -28,7 +37,7 @@ def addOrder():
         system('cls')
         # crust size
         if page == 0:
-            print("| Order a Pizza \t\t | Php" + str(price) + "\t\t | [Crust Size] - Dough - Stuffing - Toppings - Review Order - Payment |")
+            print("| Order a Pizza \t\t | Php" + str(float("%0.2f" % price)) + "\t\t | [Crust Size] - Dough - Stuffing - Toppings - Review Order - Payment |")
             print("-" * dividerLength)
             output = selector(menuDatabase['sizes'])
             price += output[1]
@@ -36,7 +45,7 @@ def addOrder():
             page += 1
             # toppings
         elif page == 1:
-            print("| Order a Pizza \t\t | Php" + str(price) + "\t\t | Crust Size - [Dough] - Stuffing - Toppings - Review Order - Payment |")
+            print("| Order a Pizza \t\t | Php" + str(float("%0.2f" % price)) + "\t\t | Crust Size - [Dough] - Stuffing - Toppings - Review Order - Payment |")
             print("-" * dividerLength)
             output = selector(menuDatabase['toppings'])
             price += output[1]
@@ -44,7 +53,7 @@ def addOrder():
             page += 1
         # dough
         elif page == 2:
-            print("| Order a Pizza \t\t | Php" + str(price) + "\t\t | Crust Size - Dough - [Stuffing] - Toppings - Review Order - Payment |")
+            print("| Order a Pizza \t\t | Php" + str(float("%0.2f" % price)) + "\t\t | Crust Size - Dough - [Stuffing] - Toppings - Review Order - Payment |")
             print("-" * dividerLength)
             output = selector(menuDatabase['dough'])
             price += output[1]
@@ -52,7 +61,7 @@ def addOrder():
             page += 1
         # stuffing
         elif page == 3:
-            print("| Order a Pizza \t\t | Php" + str(price) + "\t\t | Crust Size - Dough - Stuffing - [Toppings] - Review Order - Payment |")
+            print("| Order a Pizza \t\t | Php" + str(float("%0.2f" % price)) + "\t\t | Crust Size - Dough - Stuffing - [Toppings] - Review Order - Payment |")
             print("-" * dividerLength)
             output = selector(menuDatabase['stuffing'])
             price += output[1]
@@ -60,7 +69,7 @@ def addOrder():
             page += 1
         # review
         elif page == 4:
-            print("| Order a Pizza \t\t | Php" + str(price) + "\t\t | Crust Size - Dough - Stuffing - Toppings - [Review Order] - Payment |")
+            print("| Order a Pizza \t\t | Php" + str(float("%0.2f" % price)) + "\t\t | Crust Size - Dough - Stuffing - Toppings - [Review Order] - Payment |")
             print("-" * dividerLength)
             print("\nYour pizza: ")
             for i in currentOrder:
@@ -132,7 +141,7 @@ def viewCart(orderList):
 # if you have to tell the user a message sa they go back to the menu, 
 # call the menu() function with the message as a string parameter
 def menu(message = None):
-    system('cls')
+    clear()
     if message != None:
         print(message)
     
@@ -140,7 +149,7 @@ def menu(message = None):
     print("(A)dd pizza to order - (P)ay for order - View order (h)istory - (Q)uit")
     
     chosenOption = input()
-    system('cls')
+    clear()
     
     if chosenOption == 'a':
         addOrder()
@@ -163,7 +172,7 @@ def quit():
         userChoice = input().lower()
         
         if userChoice == 'y':
-            system('cls')
+            clear()
             print("Goodbye.")
             accountDatabase.close()
             exit()
@@ -176,7 +185,7 @@ accountDatabase = json.load(open('accounts.json', 'r'))
 
 accountMatched = False
 
-system('cls')
+clear()
 
 # repeat the login process while a valid username and password have not been entered yet.
 while not accountMatched:
@@ -191,13 +200,13 @@ while not accountMatched:
     for account in accountDatabase:
         currentAccount = accountDatabase[account]
         if username == currentAccount['username'] and password == currentAccount['password']:
-            system('cls')
+            clear()
             print("Welcome, " + username)
             orderHistory = currentAccount['orderHistory']
             accountMatched = True
             break
 
-    system('cls')
+    clear()
     print("You have entered either an incorrect username or password.")
 
 menu()
