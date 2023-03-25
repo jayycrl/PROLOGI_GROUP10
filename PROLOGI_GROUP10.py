@@ -44,7 +44,6 @@ def addOrder(orderNumber = None):
     
     while page < 6:
         system('cls')
-        print(str(orderList))
         
         # shows the user what their order is so far
         print("| Current pizza:", end = " ")
