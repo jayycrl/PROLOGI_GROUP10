@@ -8,8 +8,9 @@ from os import system, name
 # Crust type,
 # Crust stuffing,
 # Quantity (integer),
-# Price (float)
-# Example: ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00]
+# Price (float),
+# Timestamp
+# Example: ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:39:45"]
 orderList = []
 menuJSON = open('menu.json', 'r')
 menuDatabase = json.load(menuJSON)
@@ -49,7 +50,6 @@ def addOrder(orderNumber = None):
         currentTime = time.strftime('%Y-%m-%d, %H:%M:%S')
         
         # shows the user what their order is so far
-        print(str(orderList))
         print("| Current pizza:", end = " ")
         for part in currentOrder[:4]:
             if part != None:
@@ -184,6 +184,22 @@ def payOrder(orderList):
     input()
     menu()
 
+# we generally display orders in the same way throughout the system, so this function reduces repetition.
+def printFormattedOrder(orderList):
+    # this will count down from the length of the list
+    # to assign each element an order number.
+    orderNumber = len(orderList)
+
+    for order in reversed(orderList):
+        orderNumber -= 1
+        
+        # print a number that represents the order number. then, print each individual element of the order 
+        print("(", orderNumber, ") ( x", order[4], ")")
+        for part in order[:4]:
+            print("     ", part)
+        print("     ", order[6])
+        print("     ", "Php", "{0:.2f}".format(order[5]))
+
 def viewOrderHistory(orderHistory):
     if orderHistory == []:
         menu("You have not ordered anything.")
@@ -194,16 +210,7 @@ def viewOrderHistory(orderHistory):
     
     # .index() gets the first item that matches the given parameter,
     # meaning that duplicate items would break the system.
-    orderNumber = len(orderHistory)
-    for order in reversed(orderHistory):
-        orderNumber -= 1
-        
-        # print a number that represents the order number. then, print each individual element of the order 
-        print("(", orderNumber, ") ( x", order[4], ")")
-        for part in order[:4]:
-            print("     ", part)
-        print("     ", order[6])
-        print("     ", "Php", "{0:.2f}".format(order[5]))
+    printFormattedOrder(orderHistory)
         
     input("Press ENTER to go back to the main menu.")
     menu()
@@ -218,16 +225,8 @@ def viewCart(orderList):
         print("| This list is sorted from newest to oldest. |")
         print("----------------------------------------------")
         
-        orderNumber = len(orderList)
-        for order in reversed(orderList):
-            orderNumber -= 1
-            
-            # print a number that represents the order number. then, print each individual element of the order 
-            print("(", orderNumber, ") ( x", order[4], ")")
-            for part in order[:4]:
-                print("     ", part)
-            print("     ", order[6])
-            print("     ", "Php", "{0:.2f}".format(order[5]))
+        printFormattedOrder(orderList)
+
         try:
             choice = input("Type the number of the order you would like to modify or press M to go back to the main menu: ")
             if choice == 'm' or choice == 'M':
@@ -246,22 +245,27 @@ def viewCart(orderList):
     clear()
     
     selectedOrder = orderList[selectedChoice]
-    print("| View your cart | You are editing order ", orderNumber, ". |")
-    print("(", orderNumber + ")", " ", selectedOrder[0])
-    for part in selectedOrder[1:]:
-        print(" " * (orderNumber + 4), part)
+    print("| View your cart | You are editing order", selectedChoice, "|")
+    
+    # print a number that represents the order number. then, print each individual element of the order 
+    print("(", selectedChoice, ") ( x", selectedOrder[4], ")")
+    for part in selectedOrder[:4]:
+        print("     ", part)
+    print("     ", selectedOrder[6])
+    print("     ", "Php", "{0:.2f}".format(selectedOrder[5]))
+
     
     choice = input("Press E to edit the order, D to delete it, or M to go back: ").lower()
     if choice == 'e':
-        addOrder(orderNumber)
+        addOrder(selectedChoice)
     elif choice == 'd':
-        orderList.pop(orderNumber)
+        orderList.pop(selectedChoice)
         clear()
-        print("Order " + str(orderNumber) + " removed.")
+        print("Order " + str(selectedChoice) + " removed.")
         viewCart(orderList)
     elif choice == 'm':
         clear()
-        viewCart(orderList)
+        viewCart(orderList, selectedChoice)
     menu()
         
         
