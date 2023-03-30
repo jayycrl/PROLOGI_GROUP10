@@ -3,13 +3,13 @@ import time
 from os import system, name
 
 # orders in both orderList and orderHistory are arrays that are structured as follows:
-# Crust size,
-# Toppings,
-# Crust type,
-# Crust stuffing,
-# Quantity (integer),
-# Price (float),
-# Timestamp
+# [0] Crust size,
+# [1] Toppings,
+# [2] Crust type,
+# [3] Crust stuffing,
+# [4] Quantity (integer),
+# [5] Price (float),
+# [6] Timestamp
 # Example: ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:39:45"]
 orderList = []
 menuJSON = open('menu.json', 'r')
@@ -173,6 +173,9 @@ def orderPageSelector(page):
 
 # to create a seamless loop with the menu,
 # all the functions below call the menu() function after running.
+# Example: [["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:39:45"], 
+#           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:42:12"],
+#           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:44:36"],]
 def payOrder(orderList):    
     totalPrice = 0
     
