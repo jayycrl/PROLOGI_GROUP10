@@ -1,5 +1,6 @@
 import json
 import time
+import payment
 from os import system, name
 
 # orders in both orderList and orderHistory are arrays that are structured as follows:
@@ -38,6 +39,9 @@ def addOrder(orderNumber = None):
         
         # set current order to the last one in the list (.append() adds an item to the end of a list)
         currentOrder = orderList[-1]
+        
+        # a two dimensional array containing 
+        selectorOutput = [None, None, None, None, None]
     
     # number of dashes between the price/order ui on top and the menu
     dividerLength = 130
@@ -47,7 +51,7 @@ def addOrder(orderNumber = None):
     
     while page < 7:
         system('cls')
-        currentTime = time.strftime('%Y-%m-%d, %H:%M:%S')
+        currentTime = time.strftime('%Y-%m-%d, %I:%M:%S')
         
         # shows the user what their order is so far
         print("| Current pizza:", end = " ")
@@ -59,33 +63,33 @@ def addOrder(orderNumber = None):
         print("|\n| Menu \t\t | Php " + "{0:.2f}".format(price), end = "\t\t")
         # crust size
         if page == 0:
-            print("| [1. Crust Size] - 2. Dough - 3. Stuffing - 4. Toppings - 5. Quantity - 6. Review Order |")
+            print("| [1. Crust Size] - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
             print("-" * dividerLength)
-            output = selector(menuDatabase['sizes'])
+            # selector() returns a list containing the selected item and the price.
+            # Example: ["Small (10 inch)", 0.00]
+            selectorOutput[page] = (selector(menuDatabase['sizes']))
         # toppings
         elif page == 1:
-            print("| 1. Crust Size - [2. Dough] - 3. Stuffing - 4. Toppings - 5. Quantity - 6. Review Order |")
+            print("| 1. Crust Size - [2. Toppings] - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
             print("-" * dividerLength)
-            output = selector(menuDatabase['toppings'])
+            selectorOutput[page] = (selector(menuDatabase['toppings']))
         # dough
         elif page == 2:
-            print("| 1. Crust Size - 2. Dough - [3. Stuffing] - 4. Toppings - 5. Quantity - 6. Review Order |")
+            print("| 1. Crust Size - 2. Toppings - [3. Dough] - 4. Stuffing - 5. Quantity - 6. Review Order |")
             print("-" * dividerLength)
-            output = selector(menuDatabase['dough'])
+            selectorOutput[page] = (selector(menuDatabase['dough']))
         # stuffing
         elif page == 3:
-            print("| 1. Crust Size - 2. Dough - 3. Stuffing - [4. Toppings] - 5. Quantity - 6. Review Order |")
+            print("| 1. Crust Size - 2. Toppings - 3. Dough - [4. Stuffing] - 5. Quantity - 6. Review Order |")
             print("-" * dividerLength)
-            output = selector(menuDatabase['stuffing'])
+            selectorOutput[page] = (selector(menuDatabase['stuffing']))
         # quantity
         elif page == 4:
-            print("| 1. Crust Size - 2. Dough - 3. Stuffing - 4. Toppings - [5. Quantity] - 6. Review Order |")
-            quantity = quantitySelector()
-            price *= quantity
-            currentOrder[page] = quantity
+            print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - [5. Quantity] - 6. Review Order |")
+            selectorOutput[page] = quantitySelector()            
         # review
         elif page == 5:
-            print("| 1. Crust Size - 2. Dough - 3. Stuffing - 4. Toppings - 5. Quantity - [6. Review Order] |")
+            print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - [6. Review Order] |")
             print("-" * dividerLength)
             currentOrder[page] = price
         # append timestamp to order
@@ -93,12 +97,30 @@ def addOrder(orderNumber = None):
             currentOrder[page] = currentTime
             menu("Pizza added to current order.")
         
-        # page 4 has a different procedure
-        if page < 4:
-            currentOrder[page] = output[0]
-            price += output[1]
+        # calls the orderPageSeletor() function, which returns either a 1 or -1 based on if the user wants to go to the next or previous page.
+        pageOperation = orderPageSelector(page)
         
-        page += orderPageSelector(page)
+        # quantity and review order page have different procedures
+        if page < 4:
+            # add the outputted item (like the toppings, dough, etc. to the appropriate part of the current order array).
+            currentOrder[page] = selectorOutput[page][0]
+            if pageOperation == 1:
+                price += selectorOutput[page][1]
+            else:
+                price -= selectorOutput[page - 1][1]
+        elif page == 4:
+            currentOrder[page] = selectorOutput[page]
+            
+            if pageOperation == 1:
+                price *= selectorOutput[page]
+            else:
+                price -= selectorOutput[page - 1][1]
+        elif page == 5:
+            if pageOperation == -1:
+                price /= selectorOutput[page - 1]
+        
+        # add 1 or -1 to the current page based on user selection.
+        page += pageOperation
 
 # this function asks the cashier to provide the number of this order that the customer wants.
 def quantitySelector():
@@ -142,7 +164,7 @@ def selector(list):
             print("Invalid choice. Please input a number from 0 to " + str(list.index(list[-1])))
         else:
             selectedChoice = choice
-    # output is an array containing the name and price of the choice.
+    # returns an array containing the name and price of the choice.
     # Example: ["Small (10 inch)", 0.00]
     return list[selectedChoice]
 
@@ -154,7 +176,7 @@ def orderPageSelector(page):
         return 1
     elif page == 5:
         while selectedChoice == None:
-            choice = input("Verify with the customer that the pizza they have chosen so far are correct. Would you like to go back to the menu? (N to go back to the menu, P to go to the previous page): ").lower()
+            choice = input("Verify with the customer that the pizza they have chosen so far is correct.\nWould you like to go back to the menu? (N to go back to the menu, P to go to the previous page): ").lower()
             if choice == 'n':
                 return 1
             elif choice == 'p':
@@ -176,16 +198,6 @@ def orderPageSelector(page):
 # Example: [["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:39:45"], 
 #           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:42:12"],
 #           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:44:36"],]
-def payOrder(orderList):    
-    totalPrice = 0
-    
-    # calculate total price across all orders.
-    for order in orderList:
-        totalPrice += order[5]
-    
-    print(str("{0:.2f}".format(totalPrice)))
-    input()
-    menu()
 
 # we generally display orders in the same way throughout the system, so this function reduces repetition.
 def printFormattedOrder(orderList):
@@ -198,10 +210,13 @@ def printFormattedOrder(orderList):
         
         # print a number that represents the order number. then, print each individual element of the order 
         print("(", orderNumber, ") ( x", order[4], ")")
-        for part in order[:4]:
+        for count, part in enumerate(order[:4]):
+            if count == 4:
+                print("\n")
             print("     ", part)
         print("     ", order[6])
         print("     ", "Php", "{0:.2f}".format(order[5]))
+    return
 
 def viewOrderHistory(orderHistory):
     if orderHistory == []:
@@ -216,7 +231,7 @@ def viewOrderHistory(orderHistory):
     printFormattedOrder(orderHistory)
         
     input("Press ENTER to go back to the main menu.")
-    menu()
+    return
 
 def viewCart(orderList):
     if orderList == []:
@@ -269,7 +284,7 @@ def viewCart(orderList):
     elif choice == 'm':
         clear()
         viewCart(orderList, selectedChoice)
-    menu()
+    return
         
         
 # if you have to tell the user a message sa they go back to the menu, 
@@ -279,7 +294,7 @@ def menu(message = None):
     currentDate = time.strftime('%A %B %d, %Y')
     
     chosenOption = None
-    while chosenOption == None:
+    while chosenOption != 'q':
         clear()
         
         if message != None:
@@ -288,24 +303,21 @@ def menu(message = None):
         print("| Type a letter corresponding to your desired menu option. |")
         print("| (T)ake customer order - (P)rint receipt - Modify (C)urrent Order - View order (h)istory - (Q)uit |")
         
-        option = input().lower()
+        chosenOption = input().lower()
         clear()
     
-        if option == 't':
-            chosenOption = option
+        if chosenOption == 't':
             addOrder()
-        elif option == 'p':
-            chosenOption = option
-            payOrder(orderList)
-        elif option == 'c':
-            chosenOption = option
+        elif chosenOption == 'p':
+            payment.payOrder(orderList)
+            menu()
+        elif chosenOption == 'c':
             viewCart(orderList)
-        elif option == 'h':
-            chosenOption = option
+        elif chosenOption == 'h':
             viewOrderHistory(orderHistory)
-        elif option == 'q':
-            chosenOption = option
-            quit()
+        elif chosenOption == 'q':
+            # if the user chooses not to quit when an order is still in progress, chosenOption will be reset to a blank state, allowing the loop to continue.
+            chosenOption = quit()
         else:
             message = "Invalid option."
 
@@ -329,7 +341,7 @@ def quit():
             menuJSON.close()
             exit()
         elif userChoice == 'n':
-            menu()
+            return ""
         
         print("Invalid choice. Please input either 'y' or 'n'.")
     
