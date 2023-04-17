@@ -35,5 +35,11 @@
         ["No crust stuffing", 0.00],
         ["Cheese stuffed crust", 100.00],
         ["Sausage stuffed crust", 100.00]
-    ]
+    ],
+    "codes": {
+        "123456": 0.9,
+        "121212": 0.8,
+        "12345678": 0.7,
+        "free99": 0
+    }
 }

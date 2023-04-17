@@ -1,26 +1,200 @@
 {
-    "account1" : {
-        "username"    : "user1",
-        "password"    : "password1",
+    "account1": {
+        "username": "user1",
+        "password": "password1",
         "orderHistory": [
-                        ["Small (10 inch)", "Pepperoni", "Thin crust", "Cheese stuffed crust", 1, 469.00, "2023-03-26, 10:39:45"],
-                        ["Large (14 inch)", "Jalapeno Poppers", "Pan Pizza", "Sausage Stuffed Crust", 1, 799.00, "2023-03-26, 10:40:28"]
-                        ]
+            [
+                "Small (10 inch)",
+                "Pepperoni",
+                "Thin crust",
+                "Cheese stuffed crust",
+                1,
+                469.0,
+                "2023-03-26, 10:39:45"
+            ],
+            [
+                "Large (14 inch)",
+                "Jalapeno Poppers",
+                "Pan Pizza",
+                "Sausage Stuffed Crust",
+                1,
+                799.0,
+                "2023-03-26, 10:40:28"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 03:28:25"
+            ],
+            [
+                "Medium (12 inch)",
+                "Bacon Supreme",
+                "Thin crust",
+                "Cheese stuffed crust",
+                2,
+                1378.0,
+                "2023-04-17, 03:30:26"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 04:06:29"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 04:08:28"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "Cheese stuffed crust",
+                1,
+                469.0,
+                "2023-04-17, 04:16:17"
+            ],
+            [
+                "Medium (12 inch)",
+                "Pepperoni",
+                "Thin crust",
+                "Cheese stuffed crust",
+                1,
+                659.0,
+                "2023-04-17, 04:16:42"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                11,
+                4059.0,
+                "2023-04-17, 04:20:12"
+            ]
+        ]
     },
-    "account2" : {
-        "username"    : "user2",
-        "password"    : "password2",
+    "account2": {
+        "username": "user2",
+        "password": "password2",
         "orderHistory": [
-                        ["Medium (12 inch)", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 938.00, "2023-03-26, 10:52:17"], 
-                        ["Large (14 inch)", "Jalapeno Poppers", "Pan Pizza", "Sausage Stuffed Crust", 3, 1407.00, "2023-03-26, 10:52:49"]
-                        ]
+            [
+                "Medium (12 inch)",
+                "Pepperoni",
+                "Thin crust",
+                "Cheese stuffed crust",
+                2,
+                938.0,
+                "2023-03-26, 10:52:17"
+            ],
+            [
+                "Large (14 inch)",
+                "Jalapeno Poppers",
+                "Pan Pizza",
+                "Sausage Stuffed Crust",
+                3,
+                1407.0,
+                "2023-03-26, 10:52:49"
+            ],
+            [
+                "Medium (12 inch)",
+                "Pesto",
+                "Thin crust",
+                "Sausage stuffed crust",
+                1,
+                749.0,
+                "2023-04-17, 03:32:39"
+            ],
+            [
+                "Large (14 inch)",
+                "BBQ Chicken",
+                "Thin crust",
+                "Cheese stuffed crust",
+                1,
+                839.0,
+                "2023-04-17, 03:38:31"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 03:45:27"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 03:52:43"
+            ]
+        ]
     },
-    "account3" : {
-        "username"    : "user3",
-        "password"    : "password",
+    "account3": {
+        "username": "user3",
+        "password": "password3",
         "orderHistory": [
-                        ["Small (10 inch)", "Pepperoni", "Thin crust", "Cheese stuffed crust", 1, 469.00, "2023-03-26, 10:53:08"], 
-                        ["Large (14 inch)", "Jalapeno Poppers", "Pan Pizza", "Sausage Stuffed Crust", 1, 799.00, "2023-03-26, 10:53:25"]
-                        ]
+            [
+                "Small (10 inch)",
+                "Pepperoni",
+                "Thin crust",
+                "Cheese stuffed crust",
+                1,
+                469.0,
+                "2023-03-26, 10:53:08"
+            ],
+            [
+                "Large (14 inch)",
+                "Jalapeno Poppers",
+                "Pan Pizza",
+                "Sausage Stuffed Crust",
+                1,
+                799.0,
+                "2023-03-26, 10:53:25"
+            ],
+            [
+                "Medium (12 inch)",
+                "Pepperoni",
+                "Thin crust",
+                "Sausage stuffed crust",
+                1,
+                659.0,
+                "2023-04-17, 03:37:24"
+            ],
+            [
+                "Large (14 inch)",
+                "Jalapeno Poppers",
+                "Thin crust",
+                "Cheese stuffed crust",
+                2,
+                1798.0,
+                "2023-04-17, 03:37:39"
+            ],
+            [
+                "Small (10 inch)",
+                "Cheese",
+                "Pan Pizza",
+                "No crust stuffing",
+                1,
+                369.0,
+                "2023-04-17, 03:48:46"
+            ]
+        ]
     }
 }

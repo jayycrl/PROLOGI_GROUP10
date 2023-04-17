@@ -15,6 +15,7 @@ from os import system, name
 orderList = []
 menuJSON = open('menu.json', 'r')
 menuDatabase = json.load(menuJSON)
+paymentSuccessful = False
 
 # cross-platform screen clear.
 # @mohit_negi. (2018, April). How to clear screen in python. https://www.geeksforgeeks.org/clear-screen-python/
@@ -61,41 +62,42 @@ def addOrder(orderNumber = None):
         
         # prints first half of the second menu row
         print("|\n| Menu \t\t | Php " + "{0:.2f}".format(price), end = "\t\t")
-        # crust size
-        if page == 0:
-            print("| [1. Crust Size] - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
-            print("-" * dividerLength)
-            # selector() returns a list containing the selected item and the price.
-            # Example: ["Small (10 inch)", 0.00]
-            selectorOutput[page] = (selector(menuDatabase['sizes']))
-        # toppings
-        elif page == 1:
-            print("| 1. Crust Size - [2. Toppings] - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
-            print("-" * dividerLength)
-            selectorOutput[page] = (selector(menuDatabase['toppings']))
-        # dough
-        elif page == 2:
-            print("| 1. Crust Size - 2. Toppings - [3. Dough] - 4. Stuffing - 5. Quantity - 6. Review Order |")
-            print("-" * dividerLength)
-            selectorOutput[page] = (selector(menuDatabase['dough']))
-        # stuffing
-        elif page == 3:
-            print("| 1. Crust Size - 2. Toppings - 3. Dough - [4. Stuffing] - 5. Quantity - 6. Review Order |")
-            print("-" * dividerLength)
-            selectorOutput[page] = (selector(menuDatabase['stuffing']))
-        # quantity
-        elif page == 4:
-            print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - [5. Quantity] - 6. Review Order |")
-            selectorOutput[page] = quantitySelector()            
-        # review
-        elif page == 5:
-            print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - [6. Review Order] |")
-            print("-" * dividerLength)
-            currentOrder[page] = price
-        # append timestamp to order
-        else:
-            currentOrder[page] = currentTime
-            menu("Pizza added to current order.")
+        match page:
+            # crust size
+            case 0:
+                print("| [1. Crust Size] - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
+                print("-" * dividerLength)
+                # selector() returns a list containing the selected item and the price.
+                # Example: ["Small (10 inch)", 0.00]
+                selectorOutput[page] = (selector(menuDatabase['sizes']))
+            # toppings
+            case 1:
+                print("| 1. Crust Size - [2. Toppings] - 3. Dough - 4. Stuffing - 5. Quantity - 6. Review Order |")
+                print("-" * dividerLength)
+                selectorOutput[page] = (selector(menuDatabase['toppings']))
+            # dough
+            case 2:
+                print("| 1. Crust Size - 2. Toppings - [3. Dough] - 4. Stuffing - 5. Quantity - 6. Review Order |")
+                print("-" * dividerLength)
+                selectorOutput[page] = (selector(menuDatabase['dough']))
+            # stuffing
+            case 3:
+                print("| 1. Crust Size - 2. Toppings - 3. Dough - [4. Stuffing] - 5. Quantity - 6. Review Order |")
+                print("-" * dividerLength)
+                selectorOutput[page] = (selector(menuDatabase['stuffing']))
+            # quantity
+            case 4:
+                print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - [5. Quantity] - 6. Review Order |")
+                selectorOutput[page] = quantitySelector()            
+            # review
+            case 5:
+                print("| 1. Crust Size - 2. Toppings - 3. Dough - 4. Stuffing - 5. Quantity - [6. Review Order] |")
+                print("-" * dividerLength)
+                currentOrder[page] = price
+            # append timestamp to order
+            case other:
+                currentOrder[page] = currentTime
+                return
         
         # calls the orderPageSeletor() function, which returns either a 1 or -1 based on if the user wants to go to the next or previous page.
         pageOperation = orderPageSelector(page)
@@ -121,21 +123,22 @@ def addOrder(orderNumber = None):
         
         # add 1 or -1 to the current page based on user selection.
         page += pageOperation
+    return orderList
 
 # this function asks the cashier to provide the number of this order that the customer wants.
 def quantitySelector():
-    quantity = None
-    while quantity == None:
+    quantity = 0
+    while quantity == 0:
         choice = input("Ask the customer how many of this pizza they want and input it here: ")
         try:
             int(choice)
-            
-            if choice == 0:
-                print("Please input a number greater than 0.")
-                continue
-            quantity = int(choice)
         except:
             print("Please input a valid number.")
+        
+        if choice == 0:
+                print("Please input a number greater than 0.")
+        else:
+            quantity = int(choice)
     return quantity
 
 # this function accepts a list of items to display.
@@ -193,34 +196,11 @@ def orderPageSelector(page):
 
         print("Invalid choice. Please input either 'n' or 'p'.")
 
-# to create a seamless loop with the menu,
-# all the functions below call the menu() function after running.
-# Example: [["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:39:45"], 
-#           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:42:12"],
-#           ["Small - 10 inch", "Pepperoni", "Thin crust", "Cheese stuffed crust", 2, 469.00, "2023-03-26, 10:44:36"],]
-
-# we generally display orders in the same way throughout the system, so this function reduces repetition.
-def printFormattedOrder(orderList):
-    # this will count down from the length of the list
-    # to assign each element an order number.
-    orderNumber = len(orderList)
-
-    for order in reversed(orderList):
-        orderNumber -= 1
-        
-        # print a number that represents the order number. then, print each individual element of the order 
-        print("(", orderNumber, ") ( x", order[4], ")")
-        for count, part in enumerate(order[:4]):
-            if count == 4:
-                print("\n")
-            print("     ", part)
-        print("     ", order[6])
-        print("     ", "Php", "{0:.2f}".format(order[5]))
-    return
-
 def viewOrderHistory(orderHistory):
     if orderHistory == []:
-        menu("You have not ordered anything.")
+        print("The order history is empty. Press ENTER to go back to the main menu.")
+        input()
+        return
     
     print("| Order History |")
     print("| This list is sorted from newest to oldest. |")
@@ -228,14 +208,16 @@ def viewOrderHistory(orderHistory):
     
     # .index() gets the first item that matches the given parameter,
     # meaning that duplicate items would break the system.
-    printFormattedOrder(orderHistory)
+    payment.printFormattedOrder(orderHistory)
         
     input("Press ENTER to go back to the main menu.")
     return
 
 def viewCart(orderList):
     if orderList == []:
-        menu("There are no items in the current order.")
+        print("There are no items in the current order. Press ENTER to go back to the main menu.")
+        input()
+        return
     selectedChoice = None
     
     while selectedChoice == None:
@@ -243,13 +225,12 @@ def viewCart(orderList):
         print("| This list is sorted from newest to oldest. |")
         print("----------------------------------------------")
         
-        printFormattedOrder(orderList)
+        payment.printFormattedOrder(orderList)
 
         try:
             choice = input("Type the number of the order you would like to modify or press M to go back to the main menu: ")
             if choice == 'm' or choice == 'M':
-                menu()
-                break
+                return
             orderList[int(choice)]
         except ValueError:
             print("Invalid choice.")
@@ -285,20 +266,20 @@ def viewCart(orderList):
         clear()
         viewCart(orderList, selectedChoice)
     return
-        
-        
-# if you have to tell the user a message sa they go back to the menu, 
-# call the menu() function with the message as a string parameter
-def menu(message = None):
-    currentTime = time.strftime('%H:%M %p')
+
+def menu(orderList, message = None):
+    currentTime = time.strftime('%H:%M')
     currentDate = time.strftime('%A %B %d, %Y')
     
     chosenOption = None
+    
+    if message != None:
+       print("|", str(message), " ")
+       message = None
+    
     while chosenOption != 'q':
         clear()
         
-        if message != None:
-            print("| Notice:", message, end = " ")
         print("|", currentTime, "|", currentDate, "|")
         print("| Type a letter corresponding to your desired menu option. |")
         print("| (T)ake customer order - (P)rint receipt - Modify (C)urrent Order - View order (h)istory - (Q)uit |")
@@ -309,17 +290,20 @@ def menu(message = None):
         if chosenOption == 't':
             addOrder()
         elif chosenOption == 'p':
-            payment.payOrder(orderList)
-            menu()
+            paymentSuccessful = payment.payOrder(orderList, openedAccount)
+            if paymentSuccessful:
+                orderList.clear()
+                paymentSuccessful = False
         elif chosenOption == 'c':
             viewCart(orderList)
         elif chosenOption == 'h':
+            with open('accounts.json', mode = 'r') as accountsJSONIn:
+                accountData = json.load(accountsJSONIn)
+                orderHistory = accountData[openedAccount]["orderHistory"]
             viewOrderHistory(orderHistory)
         elif chosenOption == 'q':
             # if the user chooses not to quit when an order is still in progress, chosenOption will be reset to a blank state, allowing the loop to continue.
             chosenOption = quit()
-        else:
-            message = "Invalid option."
 
 def quit():
     if orderList == []:
@@ -336,7 +320,7 @@ def quit():
         
         if userChoice == 'y':
             clear()
-            print("Thank you for ordering from our restaurant.")
+            print("Goodbye.")
             accountJSON.close()
             menuJSON.close()
             exit()
@@ -370,9 +354,11 @@ while not accountMatched:
             clear()
             orderHistory = currentAccount['orderHistory']
             accountMatched = True
+            # save account number (not username) as opened account for modification of account history.
+            openedAccount = account
             break
 
     clear()
     print("You have entered either an incorrect username or password. Please try again.")
 
-menu("Welcome, " + username + ".")
+menu(orderList, "Welcome, " + username + ".")
